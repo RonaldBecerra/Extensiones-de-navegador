@@ -4,7 +4,6 @@ function querySelectorIncludesText (selector, text){
 }
 
 const deleteNoLabelFunction = function(request, sender, sendResponse) {
-	alert("Entré a la función")
 	if (request.action != "deleteNoLabel"){
 		return;
 	}
@@ -24,24 +23,27 @@ const deleteNoLabelFunction = function(request, sender, sendResponse) {
 		return;
 	}
 	// Recursive auxiliar
-	function deleteOne(){
-		if (numElems > 0){
-			let elem = container.nextElementSibling.nextElementSibling;
-			elem.click();
+	function deleteOne(time=30){
+		try{
+			if (numElems > 0){
+				let elem = container.nextElementSibling.nextElementSibling;
+				elem.click();
 
-			setTimeout(() => {
-				let button = document.querySelector(".icon-button[data-tip='Delete']");
-				if (button){
-					button.click();
-					numElems--;
-				}
-				setTimeout(deleteOne, 60);
-			}, 30)
-		}
-		else{
-			// Send a response when the task is finished
-			sendResponse({message: "All no label elements deleted"});
-		}
+				setTimeout(() => {
+					let button = document.querySelector(".icon-button[data-tip='Delete']");
+					if (button){
+						button.click();
+						numElems--;
+						time=30
+					}
+					else{
+						// We wait twice in the next try
+						time *=2
+					}
+					setTimeout(deleteOne, time*2);
+				}, time)
+			}
+		} catch(e){}
 	}
 	// Call the recursive function for first time
 	deleteOne();

@@ -1,8 +1,8 @@
 {
-	"name": "Skip YouTube ads automatically",
+	"name": "Skip video ads automatically",
 	"version": "0.0.0.1",
 	"manifest_version": 3,
-	"description": "An extension to skip the YouTube ads by automating the process of clicking the Skip button",
+	"description": "An extension to skip the ads on videos by automating the process of clicking the Skip button",
 	"icons": {
 		"16": "icons/logo16x16.png",
 		"32": "icons/logo32x32.png",
@@ -34,6 +34,7 @@
 		"tabs",
 		"storage",
 		"background",
-		"scripting"
+		"scripting",
+		"https://*/*"  // Esto permite el acceso a todos los iframes de cualquier origen
 	]
 }

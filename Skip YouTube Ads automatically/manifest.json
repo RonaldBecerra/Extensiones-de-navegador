@@ -34,7 +34,6 @@
 		"tabs",
 		"storage",
 		"background",
-		"scripting",
-		"https://*/*"  // Esto permite el acceso a todos los iframes de cualquier origen
+		"scripting"
 	]
 }

@@ -3,17 +3,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	// the header "Access-Control-Allow-Origin" to any request 
 	const INVERSE_PROXY_URL = "https://cors-anywhere.herokuapp.com/";
 
-	function clickButtons(document, classList, functionToExecute){
+	function clickButtons(document, classList){
 		try{
-			classList.forEach(function (className)
-				{
-					Array.from(document.getElementsByClassName(className)).forEach(function (button){
-						console.log("Voy a hacer click")
-						button.click();
-					});	
-				}, 
-				() => functionToExecute()
-			)
+			classList.forEach(function (className){
+				Array.from(document.getElementsByClassName(className)).forEach(function (button){
+					button.click();
+				});	
+			})
 			sendResponse({ fromcontent: "This message is from content.js" });		
 		}
 		catch(e){}
@@ -26,14 +22,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		// Try to find the button(s) in the iframes
 		try{
 			document.querySelectorAll('iframe').forEach(frame => {
-				const frameChanged = false;
-
 				if (!frame.src.includes(INVERSE_PROXY_URL)){
-					var oldFrame = frame;
-					frameChanged = true;
-
 					// We always append the inverse proxy URL to avoid CORS errors
-					var newFrame = document.createElement("iframe");
+					let newFrame = document.createElement("iframe");
 					newFrame.setAttribute("src", INVERSE_PROXY_URL + frame.src);
 
 					// Replace the original iframe with the new one
@@ -42,16 +33,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 				}
 				// Try to click the buttons
 				const iframeDocument = frame.contentDocument || frame.contentWindow.document;
-				clickButtons(
-					iframeDocument, classList,
-					() => {
-						// We don't want to keep the changed frame
-						if frameChanged{
-							console.log("Voy a reemplazar")
-							frame.parentNode.replaceChild(oldFrame, frame);
-						}
-					}
-				);
+				clickButtons(iframeDocument, classList);
 			});
 		}
 		catch(e){}
